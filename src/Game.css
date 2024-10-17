@@ -1,0 +1,7 @@
+.board {
+    background-color: rgb(75, 169, 231);
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 3rem;
+    padding: 5rem;
+}

@@ -6,12 +6,14 @@ import WinDisplay from "./WinDisplay";
 
 function Game() {
     const [characterList, setCharacterList] = useState([])
+    const [lastCharList, setLastCharList] = useState([])
     const [idClicked, setIdClicked] = useState([])
     const [cardsNumber, setCardsNumber] = useState(12)
     const [currentScore, setCurrentScore] = useState(0)
     const [currentRecord, setCurrentRecord] = useState(0)
     const [won, setWon] = useState(false)
     const [flipping, setFlipping] = useState(false)
+
 
     useEffect(() => {
         const baseUrl = "https://dragonball-api.com/api/characters?limit=55"
@@ -22,6 +24,7 @@ function Game() {
             })
             .then(response => response.json())
             .then(data => {
+                console.log(data)
                 const shuffledList = data.items.sort(() => 0.5 - Math.random())
                 setCharacterList(shuffledList.slice(0 , cardsNumber))
             })
@@ -69,6 +72,7 @@ function Game() {
             setIdClicked([...idClicked, id])
             addScore()
             updateRecord()
+            setLastCharList([...characterList])
             shuffleCharacters()
             checkIfWin()
         }
@@ -78,15 +82,26 @@ function Game() {
         
     }
 
-    function shuffleCharacters() {
+    useEffect(() => {
+        setTimeout(() => {
+            setFlipping(false)
+        }, 3000)
+    },[flipping])
+
+
+    function  shuffleCharacters () {
         
         setFlipping(true)
-        
+        /* const shuffledList = await characterList.sort(() => 0.5 - Math.random())
+            setCharacterList(shuffledList) 
             
-        /* setTimeout(() => {
+            setFlipping(false) */
+            
+       /* setTimeout(() => {
             const shuffledList = characterList.sort(() => 0.5 - Math.random())
             setCharacterList(shuffledList) 
             
+           
             
         }, 200) */
 
@@ -97,10 +112,16 @@ function Game() {
             
         }, 2000)
 
-        setTimeout(() => {
+       /*  setTimeout(() => {
             setFlipping(false)
         }, 3000)
-     
+      */
+    }
+
+    function checkIfSamePlace(currentCard, index) {
+        const lastPosition = lastCharList.findIndex(card => currentCard.id === card.id)
+
+        return (index == lastPosition)
     }
 
     function changeDifficulty(cardNum) {
@@ -122,9 +143,17 @@ function Game() {
             won ? 
             (<WinDisplay playAgain={playAgain}></WinDisplay>) :
 
-                characterList.map((character) => {
+                characterList.map((character, index) => {
                     return (
-                        <Card key={character.id} name={character.name} imgSrc={character.image} onClick={() => clickHandler(character.id)} flipped={flipping}></Card>
+                        <Card 
+                            key={character.id} 
+                            name={character.name} 
+                            imgSrc={character.image} 
+                            onClick={() => clickHandler(character.id)} 
+                            flipped={flipping}
+                            samePlace={checkIfSamePlace(character, index)}
+                            >
+                        </Card>
                     )
                 })
             

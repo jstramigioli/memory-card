@@ -38,6 +38,13 @@
     background-color: coral;
 }
 
+.same {
+    border-color: brown;
+    border-width: 1rem;
+    padding: 1rem;
+    background-color: blue;
+}
+
 .card img {
     max-width: 280px;
     height: 25vh;

@@ -11,6 +11,7 @@ function Game() {
     const [currentScore, setCurrentScore] = useState(0)
     const [currentRecord, setCurrentRecord] = useState(0)
     const [won, setWon] = useState(false)
+    const [flipping, setFlipping] = useState(false)
 
     useEffect(() => {
         const baseUrl = "https://dragonball-api.com/api/characters?limit=55"
@@ -78,8 +79,28 @@ function Game() {
     }
 
     function shuffleCharacters() {
-        const shuffledList = characterList.sort(() => 0.5 - Math.random())
-        setCharacterList(shuffledList)
+        
+        setFlipping(true)
+        
+            
+        /* setTimeout(() => {
+            const shuffledList = characterList.sort(() => 0.5 - Math.random())
+            setCharacterList(shuffledList) 
+            
+            
+        }, 200) */
+
+        setTimeout(() => {
+            const shuffledList = [...characterList].sort(() => 0.5 - Math.random())
+            setCharacterList(shuffledList) 
+            
+            
+        }, 2000)
+
+        setTimeout(() => {
+            setFlipping(false)
+        }, 3000)
+     
     }
 
     function changeDifficulty(cardNum) {
@@ -103,7 +124,7 @@ function Game() {
 
                 characterList.map((character) => {
                     return (
-                        <Card key={character.id} name={character.name} imgSrc={character.image} onClick={() => clickHandler(character.id)}></Card>
+                        <Card key={character.id} name={character.name} imgSrc={character.image} onClick={() => clickHandler(character.id)} flipped={flipping}></Card>
                     )
                 })
             
